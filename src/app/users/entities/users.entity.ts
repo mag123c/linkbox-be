@@ -1,9 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { BasedDeletableEntity, BasedEntity } from '../../../infra/database/entities/base.entity';
+import { BasedEntity } from '../../../infra/database/entities/base.entity';
 import { LinkCategories } from '../../links/entities/link-categories.entity';
-import { Links } from '../../links/entities/links.entity';
 
-@Entity('user', { schema: 'linkbox' })
+@Entity('user')
 export class Users extends BasedEntity {
     @Column('varchar', { length: 100, unique: true })
     uuid!: string;

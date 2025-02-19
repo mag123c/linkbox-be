@@ -1,9 +1,9 @@
-import { Column, Entity, EntityNotFoundError, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BasedDeletableEntity } from '../../../infra/database/entities/base.entity';
 import { Users } from '../../users/entities/users.entity';
 import { Links } from './links.entity';
 
-@Entity('link_categories', { schema: 'linkbox' })
+@Entity('link_categories')
 export class LinkCategories extends BasedDeletableEntity {
     @Column('varchar', { length: 100, unique: true })
     name!: string;

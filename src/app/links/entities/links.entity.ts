@@ -1,9 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BasedDeletableEntity } from '../../../infra/database/entities/base.entity';
 import { LinkCategories } from './link-categories.entity';
-import { Users } from '../../users/entities/users.entity';
 
-@Entity('links', { schema: 'linkbox' })
+@Entity('links')
 export class Links extends BasedDeletableEntity {
     @Column('varchar', { length: 100, unique: true })
     title!: string;
