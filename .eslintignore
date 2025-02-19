@@ -1,7 +1,0 @@
-./node_modules
-./dist
-./.husky
-./.github
-.*.js
-.prettierrc
-.ecosystem.config.js

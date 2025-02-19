@@ -14,7 +14,7 @@
     "staging": "cross-env NODE_ENV=staging nest start",
     "dev": "cross-env NODE_ENV=dev nest start --watch",
     "local": "cross-env NODE_ENV=local nest start --watch",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint --ext .ts ./src ./test",
     "migration:generate:prod": "cross-env NODE_ENV=production yarn typeorm migration:generate ./src/infra/database/config/migrations/prod/Migration",
     "migration:run:prod": "cross-env NODE_ENV=production yarn typeorm migration:run",
     "migration:revert:prod": "cross-env NODE_ENV=production yarn typeorm migration:revert",
@@ -91,8 +91,8 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "yarn lint",
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix",
       "prettier --write --ignore-unknown"
     ]
   }

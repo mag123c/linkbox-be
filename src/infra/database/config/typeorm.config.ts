@@ -13,7 +13,7 @@ export const typeORMConfig = (configService: ConfigService) => {
     }
 
     return {
-        type: 'postgres',
+        type: 'mysql',
         host: configService.get<string>('DATABASE_HOST'),
         port: configService.get<number>('DATABASE_PORT'),
         username: configService.get('DATABASE_USERNAME'),
