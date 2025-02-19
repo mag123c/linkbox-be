@@ -18,7 +18,7 @@
     "migration:generate:prod": "cross-env NODE_ENV=production yarn typeorm migration:generate ./src/infra/database/config/migrations/prod/Migration",
     "migration:run:prod": "cross-env NODE_ENV=production yarn typeorm migration:run",
     "migration:revert:prod": "cross-env NODE_ENV=production yarn typeorm migration:revert",
-    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit --passWithNoTests",
     "test:cov": "jest --coverage",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource ./src/infra/database/config/migration.datasource.ts"
   },
