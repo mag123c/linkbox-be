@@ -25,10 +25,6 @@ export class LinksRes {
 export class LinksReq {
     @IsString()
     @IsNotEmpty()
-    title!: string;
-
-    @IsString()
-    @IsNotEmpty()
     url!: string;
 
     @IsString()

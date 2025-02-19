@@ -8,6 +8,12 @@ export class Links extends BasedDeletableEntity {
     title!: string;
 
     @Column('varchar', { length: 255, nullable: true })
+    description?: string;
+
+    @Column('varchar', { length: 100, nullable: true })
+    videoId?: string;
+
+    @Column('varchar', { length: 255, nullable: true })
     memo?: string;
 
     @Column('varchar', { length: 255, nullable: true })

@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { UnauthorizedError } from '../errors/class/error';
+import { UnauthorizedError } from '../errors/classes/error';
 import { ErrorCode } from '../errors/enum/error-code.enum';
 
 @Injectable()

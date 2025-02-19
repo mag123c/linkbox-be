@@ -21,7 +21,7 @@ export class CategoriesService {
      * @param req
      */
     async createCategory(userId: number, req: CategoriesReq) {
-        const category = this.categoriesRepository.create({ ...req, user: { id: userId } });
+        const category = this.categoriesRepository.create({ name: req.categoryName, user: { id: userId } });
         await this.categoriesRepository.save(category);
         return CategoriesRes.of(category);
     }

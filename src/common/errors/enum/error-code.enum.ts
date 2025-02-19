@@ -20,6 +20,7 @@ export enum ErrorCode {
     ApplicationNotFound = 400304,
     PaidQuotaExceeded = 400306,
     UnauthorizedCommon = 401000,
+    InternalServerErrorWith3rdParty = 500101,
     TooManyRequests = 500910,
     InternalServerError = 500901,
     ServiceUnavailable = 503000,

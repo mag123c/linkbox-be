@@ -1,10 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { OpengraphMetadataRes } from '../../external/opengraph/dtos/opengraph-metadata.dto';
+import { OpenGraphService } from '../../external/opengraph/services/opengraph-meatadata.service';
+import { YoutubeMetadataRes } from '../../external/youtube-metadata/dtos/youtube-metadata.dto';
+import { YoutubeMetadataService } from '../../external/youtube-metadata/services/youtube-meatadata.service';
 import { LinksReq, LinksRes } from '../dtos/links.dto';
 import { LinksRepository } from '../repositories/links.repository';
 
 @Injectable()
 export class LinksService {
-    constructor(private readonly linksRepository: LinksRepository) {}
+    constructor(
+        private readonly linksRepository: LinksRepository,
+        private readonly youtubeMetadataService: YoutubeMetadataService,
+        private readonly openGraphService: OpenGraphService,
+    ) {}
 
     /**
      * @API GET /links/:categoryId
@@ -23,7 +31,13 @@ export class LinksService {
      * @param req
      */
     async createLink(categoryId: number, req: LinksReq) {
-        const link = this.linksRepository.create({ ...req, category: { id: categoryId } });
+        const metadata: YoutubeMetadataRes | OpengraphMetadataRes = req.url.includes('yotuube.com')
+            ? await this.youtubeMetadataService.getMetadata(req.url)
+            : await this.openGraphService.getMetadata(req.url);
+
+        const link = this.linksRepository.create({ ...req, ...metadata, category: { id: categoryId } });
+        console.log(link);
+
         await this.linksRepository.save(link);
         return LinksRes.of(link);
     }

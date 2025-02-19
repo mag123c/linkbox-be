@@ -1,10 +1,10 @@
 import {
     BadRequestError,
-    UnauthorizedError,
-    TooManyRequestsError,
     InternalServerError,
     NotFoundError,
-} from '../class/error';
+    TooManyRequestsError,
+    UnauthorizedError,
+} from '../classes/error';
 import type { ErrorCode } from '../enum/error-code.enum';
 
 export class ErrorFactory {

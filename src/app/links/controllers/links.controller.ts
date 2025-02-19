@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { HttpNoContentResponse, HttpOkResponse } from '../../../common/dtos/http-response.dto';
 import { UserGuard } from '../../../common/guards/user.guard';
 import { LinksReq } from '../dtos/links.dto';
@@ -16,7 +16,7 @@ export class LinksController {
     }
 
     @Post(':categoryId')
-    async createLink(@Param('categoryId', new ParseIntPipe()) categoryId: number, req: LinksReq) {
+    async createLink(@Param('categoryId', new ParseIntPipe()) categoryId: number, @Body() req: LinksReq) {
         const links = await this.linksService.createLink(categoryId, req);
         return HttpOkResponse.of(links);
     }
