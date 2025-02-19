@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BasedDeletableEntity } from '../../../infra/database/entities/base.entity';
-import { LinkCategories } from './link-categories.entity';
+import { Categories } from '../../categories/entities/categories.entity';
 
 @Entity('links')
 export class Links extends BasedDeletableEntity {
@@ -16,7 +16,7 @@ export class Links extends BasedDeletableEntity {
     @Column('timestamp', { precision: 0, default: null })
     publishedAt?: Date;
 
-    @ManyToOne(() => LinkCategories, (category) => category.id, { nullable: false })
+    @ManyToOne(() => Categories, (category) => category.id, { nullable: false })
     @JoinColumn({ name: 'category_id' })
-    category!: LinkCategories;
+    category!: Categories;
 }

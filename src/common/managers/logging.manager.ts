@@ -11,13 +11,13 @@ interface LoggingContext {
     stack?: string;
     body?: string;
     statusCode?: number;
-    user?: any;
+    userId?: number;
 }
 
 export class LoggingManager {
     constructor(private readonly warnManager: LogWarnManager) {}
 
-    logRequest(method: string, url: string, duration: string, user: any) {
+    logRequest(method: string, url: string, duration: string, userId?: number) {
         WinstonLogger.log({
             app: 'linkbox-be',
             env: process.env.NODE_ENV,
@@ -26,11 +26,11 @@ export class LoggingManager {
             method,
             url,
             duration,
-            user: user ?? undefined,
+            userId,
         });
     }
 
-    logWarn(url: string, error: any, context: LoggingContext, user?: any) {
+    logWarn(url: string, error: any, context: LoggingContext, userId?: number) {
         const isThresholdExceeded = this.warnManager.increment(url);
 
         if (isThresholdExceeded) {
@@ -59,11 +59,11 @@ export class LoggingManager {
             referer: context.referer,
             stack: context.stack,
             body: context.body,
-            user: user ?? undefined,
+            userId,
         });
     }
 
-    logError(error: any, context: LoggingContext, user?: any) {
+    logError(error: any, context: LoggingContext, userId?: number) {
         WinstonLogger.error({
             app: 'linkbox-be',
             env: process.env.NODE_ENV,
@@ -75,7 +75,7 @@ export class LoggingManager {
             referer: context.referer,
             stack: context.stack,
             body: context.body,
-            user: user ?? undefined,
+            userId,
         });
 
         if (isProduction()) {

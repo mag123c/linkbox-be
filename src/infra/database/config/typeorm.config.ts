@@ -1,8 +1,7 @@
 import type { ConfigService } from '@nestjs/config';
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { isLocal, isTest } from '../../../common/utils/env.util';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
 export const typeORMConfig = async (configService: ConfigService) => {
     const host = configService.get<string>('DATABASE_HOST');
@@ -14,7 +13,7 @@ export const typeORMConfig = async (configService: ConfigService) => {
         }
     }
 
-    const options = {
+    return {
         type: 'mysql',
         host: configService.get<string>('DATABASE_HOST'),
         port: configService.get<number>('DATABASE_PORT'),
@@ -30,17 +29,5 @@ export const typeORMConfig = async (configService: ConfigService) => {
         extra: {
             connectionLimit: 10,
         },
-    } as DataSourceOptions;
-
-    if (isLocal() || isTest()) {
-        await runInitSQL(options);
-    }
-
-    return options as TypeOrmModuleAsyncOptions;
+    } as TypeOrmModuleAsyncOptions;
 };
-
-async function runInitSQL(options: DataSourceOptions) {
-    const dataSource = new DataSource(options);
-    await dataSource.initialize();
-    await dataSource.query(`CREATE DATABASE IF NOT EXISTS ${options.database}`);
-}

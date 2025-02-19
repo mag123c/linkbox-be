@@ -19,6 +19,7 @@ export enum ErrorCode {
     InvalidSessionKey = 400303,
     ApplicationNotFound = 400304,
     PaidQuotaExceeded = 400306,
+    UnauthorizedCommon = 401000,
     TooManyRequests = 500910,
     InternalServerError = 500901,
     ServiceUnavailable = 503000,

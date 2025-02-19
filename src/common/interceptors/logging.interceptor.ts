@@ -1,10 +1,9 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpException } from '@nestjs/common';
-import { Observable, tap, catchError, throwError } from 'rxjs';
-import { LoggingManager } from '../managers/logging.manager';
-import { isStaging } from '../utils/env.util';
-import { koreaTimeString } from '../utils/moment.util';
-import { LogWarnManager } from '../managers/log-warn.manager';
+import { CallHandler, ExecutionContext, HttpException, Injectable, NestInterceptor } from '@nestjs/common';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { BaseError } from '../errors/abstract/base.error';
+import { LogWarnManager } from '../managers/log-warn.manager';
+import { LoggingManager } from '../managers/logging.manager';
+import { koreaTimeString } from '../utils/moment.util';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -19,15 +18,16 @@ export class LoggingInterceptor implements NestInterceptor {
         const startTime = Date.now();
 
         const request = context.switchToHttp().getRequest();
-        const { method, url, user, body } = request;
+        const { method, url, body } = request;
         const referer = request.headers?.referer ?? undefined;
+        const userId = request.headers?.['x-user-id'];
 
         return next.handle().pipe(
             tap(() => {
                 const duration = `${Date.now() - startTime}ms`;
 
                 // 요청 로깅
-                this.loggingManager.logRequest(method, url, duration, user);
+                this.loggingManager.logRequest(method, url, duration, userId);
             }),
 
             catchError((error) => {
@@ -42,18 +42,18 @@ export class LoggingInterceptor implements NestInterceptor {
                     duration,
                     referer,
                     timestamp: koreaTimeString(),
-                    stack: isStaging() ? error.stack : undefined,
+                    stack: error.stack,
                     body: body ?? undefined,
                     statusCode,
                 };
 
                 //Warn 로깅
                 if (error instanceof BaseError) {
-                    this.loggingManager.logWarn(url, error, logContext, user);
+                    this.loggingManager.logWarn(url, error, logContext, userId);
                 }
                 //Error 로깅
                 else {
-                    this.loggingManager.logError(error, logContext, user);
+                    this.loggingManager.logError(error, logContext, userId);
                 }
 
                 return throwError(() => error);

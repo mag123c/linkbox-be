@@ -11,6 +11,9 @@ export const setupAppConfig = async (app: INestApplication) => {
     const expressApp = app.getHttpAdapter().getInstance();
     expressApp.set('trust proxy', true);
 
+    //prefix
+    app.setGlobalPrefix('api/v1');
+
     setupCors(app);
     setupPipe(app);
 };

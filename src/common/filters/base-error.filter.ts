@@ -3,8 +3,8 @@ import { Response } from 'express';
 import { BaseError } from '../errors/abstract/base.error';
 import { IErrorResponse } from '../errors/interface/error.interface';
 
-@Catch(Error) // 모든 Error를 처리하도록 확장
-export class BaseExceptionFilter implements ExceptionFilter {
+@Catch(Error)
+export class BaseErrorFilter implements ExceptionFilter {
     catch(exception: Error, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();

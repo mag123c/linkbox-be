@@ -1,23 +1,23 @@
 {
-  "compilerOptions": {
-      "target": "ES2023",
-      "module": "commonjs",
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "types": ["reflect-metadata", "jest"],
-      "skipLibCheck": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "outDir": "./dist",
-      "rootDir": "./",
-      "baseUrl": "./",
-      "paths": {
-          "@infra/*": ["src/infra/*"]
-      },
-      "sourceMap": true,
-      "sourceRoot": "/"
-  },
-  "include": ["src/**/*", "test/**/*"],
-  "exclude": ["node_modules", "dist", ".github", ".husky"]
+    "compilerOptions": {
+        "target": "ES2023",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "types": ["reflect-metadata", "jest", "@faker-js/faker"],
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "outDir": "./dist",
+        "rootDir": "./",
+        "baseUrl": "./",
+        "paths": {
+            "@infra/*": ["src/infra/*"]
+        },
+        "sourceMap": true,
+        "sourceRoot": "/"
+    },
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["node_modules", "dist", ".github", ".husky"]
 }

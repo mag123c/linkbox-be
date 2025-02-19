@@ -5,10 +5,10 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import type { Repository } from 'typeorm';
 import { DataSource } from 'typeorm';
 import { StorageDriver, initializeTransactionalContext } from 'typeorm-transactional';
+import { BaseErrorFilter } from '../../src/common/filters/base-error.filter';
 import { envConfig } from '../../src/config/env.config';
 import { setupPipe } from '../../src/config/global-pipe.config';
 import { DatabaseModule } from '../../src/infra/database/database.module';
-import { BaseExceptionFilter } from '../../src/common/filters/base-error.filter';
 
 export const setupModule = async (
     modules: Array<Type<any> | DynamicModule | Promise<DynamicModule>>,
@@ -27,7 +27,7 @@ export const setupModule = async (
         providers: [
             {
                 provide: APP_FILTER,
-                useClass: BaseExceptionFilter,
+                useClass: BaseErrorFilter,
             },
         ],
     }).compile();

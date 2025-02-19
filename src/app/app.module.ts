@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, APP_INTERCEPTOR, BaseExceptionFilter } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { BaseErrorFilter } from '../common/filters/base-error.filter';
+import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { envConfig } from '../config/env.config';
 import { DatabaseModule } from '../infra/database/database.module';
-import { ConfigModule } from '@nestjs/config';
-import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
-import { UsersModule } from './users/users.module';
+import { CategoriesModule } from './categories/categories.module';
 import { LinksModule } from './links/links.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
     imports: [
@@ -14,6 +16,7 @@ import { LinksModule } from './links/links.module';
             ...envConfig(),
         }),
         LinksModule,
+        CategoriesModule,
         UsersModule,
     ],
     providers: [
@@ -23,7 +26,7 @@ import { LinksModule } from './links/links.module';
         },
         {
             provide: APP_FILTER,
-            useClass: BaseExceptionFilter,
+            useClass: BaseErrorFilter,
         },
     ],
 })

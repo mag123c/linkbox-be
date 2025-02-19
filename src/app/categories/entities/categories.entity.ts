@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BasedDeletableEntity } from '../../../infra/database/entities/base.entity';
+import { Links } from '../../links/entities/links.entity';
 import { Users } from '../../users/entities/users.entity';
-import { Links } from './links.entity';
 
-@Entity('link_categories')
-export class LinkCategories extends BasedDeletableEntity {
+@Entity('categories')
+export class Categories extends BasedDeletableEntity {
     @Column('varchar', { length: 100, unique: true })
     name!: string;
 
@@ -14,6 +14,7 @@ export class LinkCategories extends BasedDeletableEntity {
 
     @OneToMany(() => Links, (link) => link.category, {
         cascade: ['soft-remove', 'recover'],
+        eager: true,
     })
     links?: Links[];
 }
