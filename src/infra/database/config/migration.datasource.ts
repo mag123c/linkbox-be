@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { isDev } from '../../../utils/env.util';
+import { isDev } from '../../../common/utils/env.util';
 
 dotenv.config({ path: path.resolve(__dirname, `../../../../.env.${process.env.NODE_ENV}`) });
 

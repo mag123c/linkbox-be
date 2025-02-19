@@ -1,6 +1,6 @@
 import type { INestApplication } from '@nestjs/common';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { isProduction } from '../utils/env.util';
+import { isProduction } from '../common/utils/env.util';
 
 export const setupPipe = (app: INestApplication) => {
     //Pipe
