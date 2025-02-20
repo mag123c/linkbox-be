@@ -1,0 +1,59 @@
+name: Linkbox API Deployment
+
+on:
+    push:
+        branches:
+            - 'main'
+
+jobs:
+    SSH_DEPLOY:
+        runs-on: [self-hosted, linkbox-api-runner]
+
+        steps:
+            - name: Execute Deployment Script
+              uses: appleboy/ssh-action@master
+              with:
+                  key: ${{ secrets.KEY }}
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  script: |
+                      set -e  # 실패 시 즉시 스크립트를 종료
+
+                      APP_DIR="/home/${{ secrets.USERNAME }}/linkbox-api"
+                      PROD_DIR="$APP_DIR/production"
+
+                      # nvm
+                      source /home/${{ secrets.USERNAME }}/.nvm/nvm.sh                      
+
+                      # env 생성
+                      echo "🔑 Creating .env file in $PROD_DIR..."
+                      echo "${{ secrets.ENV }}" > $PROD_DIR/.env.production
+                      chmod 600 $PROD_DIR/.env.production
+
+                      # 빌드
+                      echo "🛠️ Fetching the latest code in $PROD_DIR..."
+                      cd $PROD_DIR
+                      git fetch origin main
+                      git reset --hard origin/main
+
+                      echo "🛠️ Installing dependencies in $PROD_DIR..."
+                      yarn install --prefer-offline --check-files --frozen-lockfile
+
+                      echo "🛠️ Building the application in $PROD_DIR..."
+                      yarn build
+                      if [ ! -d "$PROD_DIR/dist" ]; then
+                          echo "❌ Build failed: dist directory not found!"
+                          exit 1
+                      fi
+
+                      # PM2 재시작
+                      echo "🚀 Reloading PM2 with the new build..."
+                      if pm2 list | grep -q linkbox-api; then
+                          pm2 reload $PROD_DIR/ecosystem.config.js --update-env
+                          echo "✅ Application successfully reloaded."
+                      else
+                          pm2 start $PROD_DIR/ecosystem.config.js
+                          echo "✅ Application successfully started."
+                      fi
+
+                      echo "🎉 Deployment completed successfully!"
