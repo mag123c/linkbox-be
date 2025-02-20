@@ -21,7 +21,9 @@ export class LinksService {
     async getLinks(categoryId: number) {
         const links = await this.linksRepository.find({
             where: { category: { id: categoryId } },
+            relations: ['category'],
         });
+
         return links.map((link) => LinksRes.of(link));
     }
 
@@ -31,13 +33,11 @@ export class LinksService {
      * @param req
      */
     async createLink(categoryId: number, req: LinksReq) {
-        const metadata: YoutubeMetadataRes | OpengraphMetadataRes = req.url.includes('yotuube.com')
+        const metadata: YoutubeMetadataRes | OpengraphMetadataRes = req.url.includes('youtube.com')
             ? await this.youtubeMetadataService.getMetadata(req.url)
             : await this.openGraphService.getMetadata(req.url);
 
         const link = this.linksRepository.create({ ...req, ...metadata, category: { id: categoryId } });
-        console.log(link);
-
         await this.linksRepository.save(link);
         return LinksRes.of(link);
     }

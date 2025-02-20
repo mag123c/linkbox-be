@@ -6,8 +6,7 @@ import { OpengraphMetadataRes } from '../dtos/opengraph-metadata.dto';
 
 @Injectable()
 export class OpenGraphService {
-    private readonly parts = ['snippet', 'statistics'];
-    private readonly apiKey = process.env.YOUTUBE_API_KEY;
+    private readonly apiKey = process.env.OPENGRAPH_API_KEY;
 
     constructor(
         @Inject('HTTP_CLIENT')
@@ -15,20 +14,19 @@ export class OpenGraphService {
     ) {}
 
     async getMetadata(linkUrl: string) {
-        //?part=${this.parts.join(',')}&id=${videoId}&key=${this.apiKey}
-        const url = `https://opengraph.io/api/1.1/site/${linkUrl}`;
+        const url = `https://opengraph.io/api/1.1/site/${encodeURIComponent(linkUrl)}`;
         return await this.httpClient
             .uri(url)
             .header({ 'Content-Type': 'application/json' })
             .query({
-                app_id: process.env.OPENGRAPH_API_KEY,
+                app_id: this.apiKey,
                 accept_lang: 'auto',
             })
             .get()
             .fetch()
             .then((res) => {
                 if (res.getStatusCode() !== 200) {
-                    throw new InternalServerError(ErrorCode.InternalServerErrorWith3rdParty, 'Youtube API Error');
+                    throw new InternalServerError(ErrorCode.InternalServerErrorWith3rdParty, 'OpenGraph API Error');
                 }
 
                 const item = res.getData().openGraph;

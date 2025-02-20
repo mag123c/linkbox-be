@@ -7,6 +7,12 @@ export class Links extends BasedDeletableEntity {
     @Column('varchar', { length: 100, unique: true })
     title!: string;
 
+    @Column('varchar', { length: 255 })
+    url!: string;
+
+    @Column('varchar', { length: 255, default: null })
+    thumbnail!: string;
+
     @Column('varchar', { length: 255, nullable: true })
     description?: string;
 
@@ -15,9 +21,6 @@ export class Links extends BasedDeletableEntity {
 
     @Column('varchar', { length: 255, nullable: true })
     memo?: string;
-
-    @Column('varchar', { length: 255, nullable: true })
-    thumbnail?: string;
 
     @Column('timestamp', { precision: 0, default: null })
     publishedAt?: Date;

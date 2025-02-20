@@ -7,6 +7,12 @@ export class Users extends BasedDeletableEntity {
     @Column('varchar', { length: 100, unique: true })
     uuid!: string;
 
+    @Column('varchar', { length: 100 })
+    name!: string;
+
+    @Column('tinyint')
+    thumbnail!: number;
+
     @OneToMany(() => Categories, (category) => category.user, {
         cascade: ['soft-remove', 'recover'],
     })

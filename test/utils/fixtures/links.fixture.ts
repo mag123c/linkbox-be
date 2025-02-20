@@ -8,6 +8,8 @@ export class LinksFixture {
         return {
             id: faker.number.int({ min: 1, max: 10000000 }),
             title: faker.lorem.word(10),
+            url: faker.internet.url(),
+            thumbnail: faker.image.url(),
             category: category ?? new CategoriesFixture().createTestCategory(),
         } as Links;
     }

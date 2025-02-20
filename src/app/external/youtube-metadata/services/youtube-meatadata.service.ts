@@ -35,7 +35,6 @@ export class YoutubeMetadataService {
                 }
 
                 const item = res.getData().items[0];
-                console.log(item);
 
                 return YoutubeMetadataRes.of({
                     videoId: item.id,
