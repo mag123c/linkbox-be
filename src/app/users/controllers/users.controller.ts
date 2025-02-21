@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UserId } from '../../../common/decorators/user.decorator';
 import { HttpOkResponse } from '../../../common/dtos/http-response.dto';
@@ -12,8 +12,8 @@ export class UsersController {
 
     @UseGuards(UserGuard)
     @Get()
-    async getUsers(@UserId() userId: number) {
-        const users = await this.usersService.getUser(userId);
+    async getUsers(@Query('deviceId') uuid: string) {
+        const users = await this.usersService.getUserByUUID(uuid);
         return users;
     }
 
@@ -43,7 +43,8 @@ export class UsersController {
             secure: true,
             maxAge: 365 * 24 * 60 * 60 * 1000,
             sameSite: 'none',
-            domain: 'yotubue-bookmarker-react.vercel.app',
+            domain: '.yotubue-bookmarker-react.vercel.app',
+            path: '/',
         });
     }
 }
