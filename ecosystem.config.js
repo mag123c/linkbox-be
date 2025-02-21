@@ -18,15 +18,15 @@ module.exports = {
             // Zero-downtime 설정
             watch: false,
             wait_ready: true,
-            kill_timeout: 10000,
-            listen_timeout: 50000,
+            kill_timeout: 5000,
+            listen_timeout: 10000,
             max_memory_restart: '1G',
             exp_backoff_restart_delay: 100,
             merge_logs: true,
 
             // 추가 shutdown 옵션
             shutdown_with_message: true,
-            force: false
+            force: true,
         },
     ],
 };

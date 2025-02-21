@@ -1,5 +1,6 @@
 import type { INestApplication } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
+import type { Server } from 'http';
 
 export interface ShutdownOptions {
     logger?: Logger;
@@ -10,6 +11,7 @@ export class GracefulShutdown {
     private isShuttingDown = false;
     private connectionCounter = 0;
     private readonly logger: Logger;
+    private server: Server | null = null;
 
     constructor(
         private readonly app: INestApplication,
@@ -23,10 +25,14 @@ export class GracefulShutdown {
         this.registerShutdownHandlers();
     }
 
+    public setServer(server: Server) {
+        this.server = server;
+    }
+
     private setupConnectionTracking(): void {
         this.app.use((_req: any, res: any, next: any) => {
             if (this.isShuttingDown) {
-                res.set('Connection', 'close');
+                res.set('Connection', 'close'); // HTTP Keep-Alive 비활성화
                 res.status(503).send('Server is in maintenance mode');
                 return;
             }
@@ -53,6 +59,13 @@ export class GracefulShutdown {
         this.logger.log(`🛠 Received ${signal}. Starting graceful shutdown...`);
         this.logger.log('👋 Stop accepting new connections');
 
+        // Keep-Alive 비활성화
+        if (this.server) {
+            this.server.close(() => {
+                this.logger.log('🚪 HTTP server closed.');
+            });
+        }
+
         try {
             await this.waitForConnections();
             await this.options.onShutdown?.();
@@ -73,8 +86,14 @@ export class GracefulShutdown {
 
     private waitForConnections(): Promise<void> {
         return new Promise<void>((resolve) => {
+            const timeout = setTimeout(() => {
+                this.logger.warn(`⚠️ Forced shutdown after 10 seconds.`);
+                resolve();
+            }, 10000); // 10초 강제 종료
+
             const interval = setInterval(() => {
                 if (this.connectionCounter === 0) {
+                    clearTimeout(timeout);
                     clearInterval(interval);
                     resolve();
                 }

@@ -1,10 +1,10 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { initializeTransactionalContext, StorageDriver } from 'typeorm-transactional';
+import { AppModule } from './app/app.module';
 import { setupAppConfig } from './config/app-initialize.config';
 import { ServerBootstrap } from './config/server.config';
 import { GracefulShutdown } from './config/shutdown.config';
-import { AppModule } from './app/app.module';
 
 async function bootstrap() {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
@@ -20,14 +20,18 @@ async function bootstrap() {
     // 서버 인스턴스 생성
     const server = new ServerBootstrap(app, { logger });
 
+    // HTTP Keep-Alive 비활성화
+    const httpServer = app.getHttpServer();
+    httpServer.keepAliveTimeout = 0;
+
     // Graceful Shutdown 설정
     const shutdown = new GracefulShutdown(app, {
         logger,
         onShutdown: async () => {
-            // Keep-Alive 비활성화
             server.setKeepAliveStatus(false);
         },
     });
+    shutdown.setServer(httpServer);
     shutdown.setupShutdown();
 
     // 서버 시작
