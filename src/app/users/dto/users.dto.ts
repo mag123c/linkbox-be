@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { Users } from '../entities/users.entity';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Users } from '../entities/users.entity';
 
 export class UsersRes {
     id!: number;
@@ -23,9 +23,11 @@ export class CreateUserReq {
 
     @IsNumber()
     @IsOptional()
-    thumbnai?: number = faker.number.int({ min: 1, max: 11 });
+    thumbnail: number = faker.number.int({ min: 1, max: 11 });
 
-    name?: string = faker.lorem.word({ length: { min: 5, max: 10 } });
+    @IsString()
+    @IsOptional()
+    name: string = faker.lorem.word({ length: { min: 5, max: 10 } });
 }
 
 export class UpdateUserReq {

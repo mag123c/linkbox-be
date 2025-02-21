@@ -17,20 +17,16 @@ interface LoggingContext {
 export class LoggingManager {
     constructor(private readonly warnManager: LogWarnManager) {}
 
-    logRequest(method: string, url: string, duration: string, userId?: number) {
-        WinstonLogger.log({
+    logRequest(message: string, userId?: number) {
+        WinstonLogger.log(message, {
             app: 'linkbox-be',
             env: process.env.NODE_ENV,
             level: 'info',
-            message: `${method} ${url} ${duration}`,
-            method,
-            url,
-            duration,
             userId,
         });
     }
 
-    logWarn(url: string, error: any, context: LoggingContext, userId?: number) {
+    logWarn(url: string, message: string, context: LoggingContext, userId?: number) {
         const isThresholdExceeded = this.warnManager.increment(url);
 
         if (isThresholdExceeded) {
@@ -48,11 +44,10 @@ export class LoggingManager {
             // })
         }
 
-        WinstonLogger.warn({
+        WinstonLogger.warn(message, {
             app: 'linkbox-be',
             env: process.env.NODE_ENV,
             level: 'warn',
-            message: `${context.method} ${context.url} ${context.duration} ${error.message}`,
             method: context.method,
             url: context.url,
             duration: context.duration,
@@ -63,12 +58,11 @@ export class LoggingManager {
         });
     }
 
-    logError(error: any, context: LoggingContext, userId?: number) {
-        WinstonLogger.error({
+    logError(message: string, context: LoggingContext, userId?: number) {
+        WinstonLogger.error(message, {
             app: 'linkbox-be',
             env: process.env.NODE_ENV,
             level: 'error',
-            message: `${context.method} ${context.url} ${context.duration} ${error.message}`,
             method: context.method,
             url: context.url,
             duration: context.duration,

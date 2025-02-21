@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Res, UseGuards } from '@nestjs/common';
-import { UserId } from '../../../common/decorators/user.decorator';
-import { UsersService } from '../services/users.service';
-import { UserGuard } from '../../../common/guards/user.guard';
 import { Response } from 'express';
+import { UserId } from '../../../common/decorators/user.decorator';
 import { HttpOkResponse } from '../../../common/dtos/http-response.dto';
+import { UserGuard } from '../../../common/guards/user.guard';
 import { CreateUserReq, UpdateUserReq } from '../dto/users.dto';
+import { UsersService } from '../services/users.service';
 
 @Controller('users')
 export class UsersController {
@@ -24,7 +24,7 @@ export class UsersController {
         return res.status(201).send(HttpOkResponse.of(user));
     }
 
-    @Patch(':userId')
+    @Patch('update/:userId')
     async updateUser(
         @UserId() userId: number,
         @Param('userId', new ParseIntPipe()) _userId: number,
@@ -42,6 +42,8 @@ export class UsersController {
             httpOnly: true,
             secure: true,
             maxAge: 365 * 24 * 60 * 60 * 1000,
+            sameSite: 'none',
+            domain: 'yotubue-bookmarker-react.vercel.app',
         });
     }
 }

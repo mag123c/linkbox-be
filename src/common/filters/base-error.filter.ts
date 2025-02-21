@@ -9,6 +9,7 @@ export class BaseErrorFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest();
+        const body = request.body;
 
         let code: number;
         let message: string;
@@ -40,6 +41,7 @@ export class BaseErrorFilter implements ExceptionFilter {
         if (process.env.NODE_ENV !== 'production') {
             json['path'] = request.url;
             json['stack'] = stack;
+            json['body'] = body;
         }
 
         response.status(code).json(json);

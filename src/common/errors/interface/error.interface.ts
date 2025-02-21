@@ -9,4 +9,5 @@ export interface IErrorResponse {
     message: string;
     path?: string;
     stack?: string;
+    body?: any;
 }

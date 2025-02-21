@@ -27,7 +27,7 @@ export class LoggingInterceptor implements NestInterceptor {
                 const duration = `${Date.now() - startTime}ms`;
 
                 // 요청 로깅
-                this.loggingManager.logRequest(method, url, duration, userId);
+                this.loggingManager.logRequest(method + url + duration, userId);
             }),
 
             catchError((error) => {
@@ -47,13 +47,15 @@ export class LoggingInterceptor implements NestInterceptor {
                     statusCode,
                 };
 
+                const message = `${logContext.method} ${logContext.url} ${logContext.duration} ${error.message}`;
+
                 //Warn 로깅
                 if (error instanceof BaseError) {
-                    this.loggingManager.logWarn(url, error, logContext, userId);
+                    this.loggingManager.logWarn(url, message, logContext, userId);
                 }
                 //Error 로깅
                 else {
-                    this.loggingManager.logError(error, logContext, userId);
+                    this.loggingManager.logError(message, logContext, userId);
                 }
 
                 return throwError(() => error);
