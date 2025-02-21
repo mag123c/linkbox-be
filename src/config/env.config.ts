@@ -16,7 +16,6 @@ export const envConfig = () => {
 
             YOUTUBE_API_KEY: Joi.string().required(),
             OPENGRAPH_API_KEY: Joi.string().required(),
-            WEBVIEW_URL: Joi.string().required(),
         }),
     };
 };
