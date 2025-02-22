@@ -1,4 +1,4 @@
-import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { isProduction } from '../../../common/utils/env.util';
 import { KakaoAuthGuard } from '../guards/kakao.guard';
@@ -13,11 +13,11 @@ export class AuthController {
     async signinWithKakao(@Req() req: Request) {}
 
     @UseGuards(KakaoAuthGuard)
-    @Redirect(isProduction() ? process.env.WEBVIEW_URL : 'http://localhost:5173', 302)
     @Get('/login/callback')
     async signinCallback(@Req() req: Request, @Res() res: Response) {
         const accessToken = await this.authService.signin(req.user);
         const domain = process.env.NODE_ENV === 'production' ? process.env.WEBVIEW_URL : 'localhost';
+        console.log('domain', domain);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
