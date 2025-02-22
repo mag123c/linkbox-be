@@ -24,5 +24,7 @@ export class AuthController {
             sameSite: 'none',
             domain,
         });
+
+        return { url: isProduction() ? process.env.WEBVIEW_URL : 'http://localhost:5173' };
     }
 }
