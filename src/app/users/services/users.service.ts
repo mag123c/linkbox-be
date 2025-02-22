@@ -8,11 +8,10 @@ export class UsersService {
 
     /**
      * @API GET /users
-     * @param uuid
-     * @returns
+     * @param userId
      */
-    async getUserByUUID(uuid: string) {
-        const user = await this.usersRepository.findOneOrFail({ where: { uuid } });
+    async getUser(userId: number) {
+        const user = await this.usersRepository.findOneOrFail({ where: { id: userId } });
         return UsersRes.of(user);
     }
 
@@ -38,11 +37,11 @@ export class UsersService {
     }
 
     /**
-     * @Internal
-     * @param userId
+     * @param uuid
+     * @returns
      */
-    async getUser(userId: number) {
-        const user = await this.usersRepository.findOneOrFail({ where: { id: userId } });
-        return UsersRes.of(user);
+    async getUserByUUID(uuid: string) {
+        const user = await this.usersRepository.findOne({ where: { uuid } });
+        return user;
     }
 }

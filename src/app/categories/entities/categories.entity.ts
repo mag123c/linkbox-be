@@ -1,11 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BasedDeletableEntity } from '../../../infra/database/entities/base.entity';
 import { Links } from '../../links/entities/links.entity';
 import { Users } from '../../users/entities/users.entity';
 
 @Entity('categories')
+@Index(['name', 'user'], { unique: true })
 export class Categories extends BasedDeletableEntity {
-    @Column('varchar', { length: 100, unique: true })
+    @Column('varchar', { length: 100 })
     name!: string;
 
     @ManyToOne(() => Users, (user) => user.id, { nullable: false })

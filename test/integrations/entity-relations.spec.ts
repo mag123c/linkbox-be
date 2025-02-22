@@ -52,7 +52,7 @@ describe('엔터티에 설정되어있는 관계 테스트', () => {
         // given
         const user = new UsersFixture().createTestUser();
         const category = new CategoriesFixture().createTestCategory(user);
-        const link = new LinksFixture().createTestLink(category);
+        const link = new LinksFixture().createTestLink(category, user);
 
         await usersRepository.save(user);
         await categoriesRepository.save(category);
@@ -72,7 +72,7 @@ describe('엔터티에 설정되어있는 관계 테스트', () => {
         // given
         const user = new UsersFixture().createTestUser();
         const category = new CategoriesFixture().createTestCategory(user);
-        const link = new LinksFixture().createTestLink(category);
+        const link = new LinksFixture().createTestLink(category, user);
 
         await usersRepository.save(user);
         await categoriesRepository.save(category);
@@ -96,7 +96,7 @@ describe('엔터티에 설정되어있는 관계 테스트', () => {
         // given
         const user = new UsersFixture().createTestUser();
         const category = new CategoriesFixture().createTestCategory(user);
-        const link = new LinksFixture().createTestLink(category);
+        const link = new LinksFixture().createTestLink(category, user);
 
         await usersRepository.save(user);
         await categoriesRepository.save(category);
@@ -118,7 +118,7 @@ describe('엔터티에 설정되어있는 관계 테스트', () => {
         // given
         const user = new UsersFixture().createTestUser();
         const category = new CategoriesFixture().createTestCategory(user);
-        const link = new LinksFixture().createTestLink(category);
+        const link = new LinksFixture().createTestLink(category, user);
 
         await usersRepository.save(user);
         await categoriesRepository.save(category);

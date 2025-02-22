@@ -1,10 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BasedDeletableEntity } from '../../../infra/database/entities/base.entity';
 import { Categories } from '../../categories/entities/categories.entity';
+import { Users } from '../../users/entities/users.entity';
 
 @Entity('links')
+@Index(['title', 'url', 'user'], { unique: true })
 export class Links extends BasedDeletableEntity {
-    @Column('varchar', { length: 100, unique: true })
+    @Column('varchar', { length: 100 })
     title!: string;
 
     @Column('varchar', { length: 255 })
@@ -25,7 +27,11 @@ export class Links extends BasedDeletableEntity {
     @Column('timestamp', { precision: 0, default: null })
     publishedAt?: Date;
 
-    @ManyToOne(() => Categories, (category) => category.id, { nullable: false })
+    @ManyToOne(() => Categories, (category) => category.links, { nullable: false })
     @JoinColumn({ name: 'category_id' })
     category!: Categories;
+
+    @ManyToOne(() => Users, (user) => user.links, { nullable: false })
+    @JoinColumn({ name: 'user_id' })
+    user!: Users;
 }

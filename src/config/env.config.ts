@@ -16,6 +16,14 @@ export const envConfig = () => {
 
             YOUTUBE_API_KEY: Joi.string().required(),
             OPENGRAPH_API_KEY: Joi.string().required(),
+            WEBVIEW_URL: Joi.string().required(),
+
+            JWT_SECRET: Joi.string().required(),
+            JWT_EXPIRES_IN: Joi.string().required(),
+            JWT_ALGORITHM: Joi.string().required(),
+
+            KAKAO_API_KEY: Joi.string().required(),
+            KAKAO_CALLBACK_URI: Joi.string().required(),
         }),
     };
 };

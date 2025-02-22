@@ -6,6 +6,7 @@ import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { envConfig } from '../config/env.config';
 import { DatabaseModule } from '../infra/database/database.module';
 import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { LinksModule } from './links/links.module';
 import { UsersModule } from './users/users.module';
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
         }),
         LinksModule,
         CategoriesModule,
+        AuthModule,
         UsersModule,
     ],
     providers: [

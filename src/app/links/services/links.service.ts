@@ -18,9 +18,12 @@ export class LinksService {
      * @API GET /links/:categoryId
      * @param categoryId
      */
-    async getLinks(categoryId: number) {
+    async getLinks(userId: number, categoryId: number) {
         const links = await this.linksRepository.find({
-            where: { category: { id: categoryId } },
+            where: {
+                user: { id: userId },
+                category: { id: categoryId },
+            },
             relations: ['category'],
         });
 
@@ -32,13 +35,18 @@ export class LinksService {
      * @param categoryId
      * @param req
      */
-    async createLink(categoryId: number, req: LinksReq) {
+    async createLink(userId: number, categoryId: number, req: LinksReq) {
         const metadata: YoutubeMetadataRes | OpengraphMetadataRes = req.url.includes('youtube.com')
             ? await this.youtubeMetadataService.getMetadata(req.url)
             : await this.openGraphService.getMetadata(req.url);
 
-        const link = this.linksRepository.create({ ...req, ...metadata, category: { id: categoryId } });
-        await this.linksRepository.save(link);
+        const link = this.linksRepository.create({
+            ...req,
+            ...metadata,
+            category: { id: categoryId },
+            user: { id: userId },
+        });
+        await this.linksRepository.saveLink(link);
         return LinksRes.of(link);
     }
 

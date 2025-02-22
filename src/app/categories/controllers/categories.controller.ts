@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { UserId } from '../../../common/decorators/user.decorator';
 import { HttpNoContentResponse, HttpOkResponse } from '../../../common/dtos/http-response.dto';
-import { UserGuard } from '../../../common/guards/user.guard';
+import { JwtAuthGuard } from '../../auth/guards/auth.guard';
 import { CategoriesReq } from '../dtos/categories.dto';
 import { CategoriesService } from '../services/categories.service';
 
-@UseGuards(UserGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('categories')
 export class CategoriesController {
     constructor(private readonly categoiresService: CategoriesService) {}

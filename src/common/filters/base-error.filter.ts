@@ -44,6 +44,8 @@ export class BaseErrorFilter implements ExceptionFilter {
             json['body'] = body;
         }
 
-        response.status(code).json(json);
+        const statusCode = code.toString().length === 3 ? code : Number(code.toString().slice(0, 3));
+
+        response.status(statusCode).json(json);
     }
 }

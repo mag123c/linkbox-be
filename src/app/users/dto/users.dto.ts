@@ -28,6 +28,10 @@ export class CreateUserReq {
     @IsString()
     @IsOptional()
     name: string = faker.lorem.word({ length: { min: 5, max: 10 } });
+
+    constructor(partial: Partial<CreateUserReq>) {
+        Object.assign(this, partial);
+    }
 }
 
 export class UpdateUserReq {

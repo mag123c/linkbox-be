@@ -35,7 +35,7 @@ export class ServerBootstrap {
     }
 
     public async start(): Promise<void> {
-        await this.app.listen(this.port);
+        await this.app.listen(this.port, '0.0.0.0');
         this.logger.log(`🚀 Server is running on ${this.port}`);
 
         if (process.send) {
