@@ -15,7 +15,7 @@ export class AuthController {
     @Get('/login/callback')
     async signinCallback(@Req() req: Request, @Res() res: Response) {
         const accessToken = await this.authService.signin(req.user);
-        const domain = process.env.NODE_ENV === 'production' ? process.env.WEBVIEW_URL : 'localhost';
+        const domain = process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : 'localhost';
         console.log('domain', domain);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
