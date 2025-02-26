@@ -1,6 +1,8 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
+import WinstonLogger from '../../config/winston.config';
 import { BaseError } from '../errors/abstract/base.error';
+import { UnauthorizedError } from '../errors/classes/error';
 import { IErrorResponse } from '../errors/interface/error.interface';
 
 @Catch(Error)
@@ -19,6 +21,13 @@ export class BaseErrorFilter implements ExceptionFilter {
             code = exception.code;
             message = exception.message;
             stack = exception.stack;
+
+            if (exception instanceof UnauthorizedError) {
+                WinstonLogger.warn(exception.message, {
+                    headers: request.headers,
+                    body: request.body,
+                });
+            }
 
             // 가드레이어의 에러 처리 (Interceptor를 거치지 않는 경우 로깅)
             // this.logWarn(exception, request);
