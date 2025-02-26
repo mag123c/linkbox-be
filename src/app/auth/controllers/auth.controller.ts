@@ -16,7 +16,6 @@ export class AuthController {
     async signinCallback(@Req() req: Request, @Res() res: Response) {
         const accessToken = await this.authService.signin(req.user);
         const domain = process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : 'localhost';
-        console.log('domain', domain);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
@@ -27,7 +26,7 @@ export class AuthController {
 
         const redirectUrl = process.env.NODE_ENV === 'production' ? process.env.WEBVIEW_URL! : 'http://localhost:5173';
 
-        console.log(domain, redirectUrl);
+        console.log(res.getHeaders());
 
         res.redirect(302, redirectUrl);
     }
