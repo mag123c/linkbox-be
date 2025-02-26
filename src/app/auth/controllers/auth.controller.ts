@@ -20,14 +20,10 @@ export class AuthController {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
-            domain,
             path: '/',
         });
 
         const redirectUrl = process.env.NODE_ENV === 'production' ? process.env.WEBVIEW_URL! : 'http://localhost:5173';
-
-        console.log(res.getHeaders());
-
         res.redirect(302, redirectUrl);
     }
 }
