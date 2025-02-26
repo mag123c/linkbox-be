@@ -34,3 +34,9 @@ export class LinksReq {
     @IsOptional()
     memo?: string;
 }
+
+export class UpdateLinksReq {
+    @IsString()
+    @IsOptional()
+    memo?: string = '';
+}

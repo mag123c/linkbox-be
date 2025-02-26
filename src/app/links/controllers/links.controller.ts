@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { UserId } from '../../../common/decorators/user.decorator';
 import { HttpNoContentResponse, HttpOkResponse } from '../../../common/dtos/http-response.dto';
 import { JwtAuthGuard } from '../../auth/guards/auth.guard';
-import { LinksReq } from '../dtos/links.dto';
+import { LinksReq, UpdateLinksReq } from '../dtos/links.dto';
 import { LinksService } from '../services/links.service';
 
 @UseGuards(JwtAuthGuard)
@@ -26,8 +26,14 @@ export class LinksController {
         return HttpOkResponse.of(links);
     }
 
+    @Put(':linkId')
+    async updateLink(@Param('linkId', new ParseIntPipe()) linkId: number, @Body() req: UpdateLinksReq) {
+        await this.linksService.updateLink(linkId, req);
+        return HttpNoContentResponse.of();
+    }
+
     @Delete(':linkId')
-    async deleteLink(@Param('linksId', new ParseIntPipe()) linkId: number) {
+    async deleteLink(@Param('linkId', new ParseIntPipe()) linkId: number) {
         await this.linksService.deleteLink(linkId);
         return HttpNoContentResponse.of();
     }

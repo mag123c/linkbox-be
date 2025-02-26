@@ -3,7 +3,7 @@ import { OpengraphMetadataRes } from '../../external/opengraph/dtos/opengraph-me
 import { OpenGraphService } from '../../external/opengraph/services/opengraph-meatadata.service';
 import { YoutubeMetadataRes } from '../../external/youtube-metadata/dtos/youtube-metadata.dto';
 import { YoutubeMetadataService } from '../../external/youtube-metadata/services/youtube-meatadata.service';
-import { LinksReq, LinksRes } from '../dtos/links.dto';
+import { LinksReq, LinksRes, UpdateLinksReq } from '../dtos/links.dto';
 import { LinksRepository } from '../repositories/links.repository';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class LinksService {
      * @param req
      */
     async createLink(userId: number, categoryId: number, req: LinksReq) {
-        const metadata: YoutubeMetadataRes | OpengraphMetadataRes = req.url.includes('youtube.com')
+        const metadata: YoutubeMetadataRes | OpengraphMetadataRes = req.url.includes('youtube.com/watch')
             ? await this.youtubeMetadataService.getMetadata(req.url)
             : await this.openGraphService.getMetadata(req.url);
 
@@ -48,6 +48,14 @@ export class LinksService {
         });
         await this.linksRepository.saveLink(link);
         return LinksRes.of(link);
+    }
+
+    /**
+     * @API PUT /links/:linkId
+     * @param req
+     */
+    async updateLink(linkId: number, req: UpdateLinksReq) {
+        await this.linksRepository.update(linkId, { memo: req.memo });
     }
 
     /**

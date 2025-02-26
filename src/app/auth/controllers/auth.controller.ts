@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { isProduction } from '../../../common/utils/env.util';
 import { KakaoAuthGuard } from '../guards/kakao.guard';
 import { AuthService } from '../services/auth.service';
 
@@ -25,6 +24,8 @@ export class AuthController {
             domain,
         });
 
-        return { url: isProduction() ? process.env.WEBVIEW_URL : 'http://localhost:5173' };
+        const redirectUrl = process.env.NODE_ENV === 'production' ? process.env.WEBVIEW_URL! : 'http://localhost:5173';
+
+        res.redirect(302, redirectUrl);
     }
 }

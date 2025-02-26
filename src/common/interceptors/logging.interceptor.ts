@@ -4,6 +4,8 @@ import { BaseError } from '../errors/abstract/base.error';
 import { LogWarnManager } from '../managers/log-warn.manager';
 import { LoggingManager } from '../managers/logging.manager';
 import { koreaTimeString } from '../utils/moment.util';
+import { BadRequestError } from '../errors/classes/error';
+import { ErrorCode } from '../errors/enum/error-code.enum';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -32,6 +34,12 @@ export class LoggingInterceptor implements NestInterceptor {
 
             catchError((error) => {
                 const duration = `${Date.now() - startTime}ms`;
+                const { message, stack } = error;
+
+                if (error.message.includes('Duplicate')) {
+                    error = new BadRequestError(ErrorCode.DuplicateRequest, message);
+                    error.stack = stack;
+                }
 
                 const statusCode =
                     error instanceof BaseError ? error.code : error instanceof HttpException ? error.getStatus() : 500;
@@ -47,15 +55,15 @@ export class LoggingInterceptor implements NestInterceptor {
                     statusCode,
                 };
 
-                const message = `${logContext.method} ${logContext.url} ${logContext.duration} ${error.message}`;
+                const wholeMessage = `${logContext.method} ${logContext.url} ${logContext.duration} ${error.message}`;
 
                 //Warn 로깅
                 if (error instanceof BaseError) {
-                    this.loggingManager.logWarn(url, message, logContext, userId);
+                    this.loggingManager.logWarn(url, wholeMessage, logContext, userId);
                 }
                 //Error 로깅
                 else {
-                    this.loggingManager.logError(message, logContext, userId);
+                    this.loggingManager.logError(wholeMessage, logContext, userId);
                 }
 
                 return throwError(() => error);
