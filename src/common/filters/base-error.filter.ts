@@ -21,7 +21,6 @@ export class BaseErrorFilter implements ExceptionFilter {
             code = exception.code;
             message = exception.message;
             stack = exception.stack;
-
             if (exception instanceof UnauthorizedError) {
                 WinstonLogger.warn(exception.message, {
                     headers: request.headers,
