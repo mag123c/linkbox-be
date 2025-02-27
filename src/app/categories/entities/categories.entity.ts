@@ -4,7 +4,7 @@ import { Links } from '../../links/entities/links.entity';
 import { Users } from '../../users/entities/users.entity';
 
 @Entity('categories')
-@Index(['name', 'user'], { unique: true })
+@Index(['name', 'user', 'deletedDt'], { unique: true })
 export class Categories extends BasedDeletableEntity {
     @Column('varchar', { length: 100 })
     name!: string;

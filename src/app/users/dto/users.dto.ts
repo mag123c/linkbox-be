@@ -29,6 +29,9 @@ export class CreateUserReq {
     @IsOptional()
     name: string = faker.lorem.word({ length: { min: 5, max: 10 } });
 
+    @IsOptional()
+    email?: string;
+
     constructor(partial: Partial<CreateUserReq>) {
         Object.assign(this, partial);
     }
