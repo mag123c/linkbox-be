@@ -11,6 +11,9 @@ export class Users extends BasedDeletableEntity {
     @Column('varchar', { length: 100 })
     name!: string;
 
+    @Column('varchar', { length: 100, nullable: true })
+    email?: string;
+
     @Column('tinyint')
     thumbnail!: number;
 

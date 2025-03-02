@@ -2,6 +2,7 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { KakaoAuthGuard } from '../guards/kakao.guard';
 import { AuthService } from '../services/auth.service';
+import { KakaoOAuthUser } from '../types/oauth-user.type';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +15,7 @@ export class AuthController {
     @UseGuards(KakaoAuthGuard)
     @Get('/login/callback')
     async signinCallback(@Req() req: Request, @Res() res: Response) {
-        const accessToken = await this.authService.signin(req.user);
+        const accessToken = await this.authService.signin(req.user as KakaoOAuthUser);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,

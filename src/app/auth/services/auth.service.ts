@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserReq, UsersRes } from '../../users/dto/users.dto';
 import { Users } from '../../users/entities/users.entity';
 import { UsersService } from '../../users/services/users.service';
+import { KakaoOAuthUser } from '../types/oauth-user.type';
 
 @Injectable()
 export class AuthService {
@@ -11,14 +12,14 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async signin({ id }: any) {
-        const user = await this.userService.getUserByUUID(id);
+    async signin({ no, email, name }: KakaoOAuthUser) {
+        const user = await this.userService.getUserByUUID(no);
 
         if (user) {
             return await this.signToken(user);
         }
 
-        const savedUser = await this.userService.createUser(new CreateUserReq({ uuid: id }));
+        const savedUser = await this.userService.createUser(new CreateUserReq({ uuid: no, email, name }));
 
         return await this.signToken(savedUser);
     }
