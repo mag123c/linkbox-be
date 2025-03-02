@@ -31,11 +31,40 @@ export class OpengraphMetadataRes {
     description!: string;
     thumbnail!: string;
 
-    static of(data: any): OpengraphMetadataRes {
+    static of(res: OGScrapeRes): OpengraphMetadataRes {
         const dto = new OpengraphMetadataRes();
-        dto.title = data.title;
-        dto.description = data.description;
-        dto.thumbnail = data.thumbnail;
+        dto.title = res.ogTitle || '';
+        dto.description = res.ogDescription || '';
+        dto.thumbnail = res.ogImage?.[0]?.url || '';
         return dto;
     }
+}
+
+export class OGScrapeRes {
+    ogTitle?: string;
+    ogType?: string;
+    ogUrl?: string;
+    ogDescription?: string;
+    ogImage?: OGImage[];
+    requestUrl!: string;
+    success!: boolean;
+
+    static of(data: any): OGScrapeRes {
+        const dto = new OGScrapeRes();
+        dto.ogTitle = data.ogTitle;
+        dto.ogType = data.ogType;
+        dto.ogUrl = data.ogUrl;
+        dto.ogDescription = data.ogDescription;
+        dto.ogImage = data.ogImage;
+        dto.requestUrl = data.requestUrl;
+        dto.success = data.success;
+        return dto;
+    }
+}
+
+export class OGImage {
+    height?: string;
+    type?: string;
+    url?: string;
+    width?: string;
 }

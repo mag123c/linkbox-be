@@ -1,11 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { UserId } from '../../../common/decorators/user.decorator';
 import { HttpNoContentResponse, HttpOkResponse } from '../../../common/dtos/http-response.dto';
-import { JwtAuthGuard } from '../../auth/guards/auth.guard';
 import { LinksReq, UpdateLinksReq } from '../dtos/links.dto';
 import { LinksService } from '../services/links.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('links')
 export class LinksController {
     constructor(private readonly linksService: LinksService) {}
